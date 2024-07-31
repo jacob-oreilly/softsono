@@ -1,0 +1,12 @@
+.container {
+  margin: 1em;
+}
+
+.param {
+  margin: 0.5rem;
+}
+
+.instruments-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+}
