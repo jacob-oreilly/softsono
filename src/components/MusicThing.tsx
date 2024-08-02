@@ -3,13 +3,17 @@ import './MusicThing.css';
 
 
 
-export default function MusicThing({ audioCtx, gainNode, oscOne }: { audioCtx: AudioContext, gainNode: GainNode, oscOne: OscillatorNode }) {
+export default function MusicThing({ audioCtx, gainNode, oscOne, biquadFilterNode, convolverNode, distortionNode }: { audioCtx: AudioContext, gainNode: GainNode, oscOne: OscillatorNode, biquadFilterNode: BiquadFilterNode, convolverNode: ConvolverNode, distortionNode: WaveShaperNode  }) {
     // const AudioContext = window.AudioContext;
     const [gain, setGain] = useState(0.5);
     const [soundWave, setSoundWave] = useState<OscillatorType>("sine");
     const [detune, setDetune] = useState(0.0);
     const [mute, setMute] = useState(false);
     const [startOscBtnValue, setStartOscBtnValue] = useState("Start");
+    const [frequency, setFrequency] = useState(440.0);
+    const [biquadFilter, setBiquadFilter] = useState();
+    const [convolver, setConvolver] = useState();
+    const [distortion, setDistortion] = useState();
 
     // let mute = false;
     function startStopOscillator() {
@@ -37,10 +41,17 @@ export default function MusicThing({ audioCtx, gainNode, oscOne }: { audioCtx: A
         console.log(gain);
     }
 
+    function handleFrequencyInput(e: any) {
+        setFrequency(e.target.value);
+    }
+
     function muteOsc(e: any) {
         setMute(!mute);
     }
 
+    function handleBiquadFilterInput(e: any) {
+        setBiquadFilter(e.target.value);
+    }
     useEffect(() => {
         if (mute) {
             gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
@@ -50,6 +61,7 @@ export default function MusicThing({ audioCtx, gainNode, oscOne }: { audioCtx: A
         }
         oscOne.type = soundWave;
         oscOne.detune.setValueAtTime(detune, audioCtx.currentTime);
+        oscOne.frequency.setValueAtTime(frequency, audioCtx.currentTime);
     })
     return (
         <div className="instrument-container">
@@ -60,7 +72,9 @@ export default function MusicThing({ audioCtx, gainNode, oscOne }: { audioCtx: A
                     <button className="mute" id="muteButton" onClick={muteOsc}>Mute</button>
                 </div>
                 <div className="param">Gain: <input value={gain} onChange={handleGainInput} type="number" name="gain" id="gainInput" /></div>
+                <div className="param">frequency: <input value={frequency} onChange={handleFrequencyInput} type="range" min="0" max="7050" name="frequency" id="frequencyInput" /></div>
                 <div className="param">Detune: <input value={detune} onChange={handleDetuneInput} type="number" name="detune" id="detuneInput" /></div>
+                <div className="param">Biquad Filter: <input value={biquadFilter} onChange={handleBiquadFilterInput} type="range" min="0" max="7050" name="frequency" id="frequencyInput" /></div>
                 <div className="param">
                     Sound Wave:
                     <select value={soundWave} onChange={handleWaveSelection}>

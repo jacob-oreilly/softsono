@@ -5,7 +5,10 @@ import MusicThing from './components/MusicThing';
 type Oscillator = {
   audioCtx: AudioContext,
   gainNode: GainNode,
-  osc: OscillatorNode
+  osc: OscillatorNode,
+  biquadFilter: BiquadFilterNode,
+  convolver: ConvolverNode,
+  distortion: WaveShaperNode  
 }
 
 function App() {
@@ -16,13 +19,22 @@ function App() {
     const audCtx = new AudioContext();
     const gain = audCtx.createGain();
     const oscil = audCtx.createOscillator();
+    const biquadFilter = audCtx.createBiquadFilter();
+    const convolver = audCtx.createConvolver();
+    const distortion = audCtx.createWaveShaper();
     const oscillator: Oscillator = {
       audioCtx: audCtx,
       gainNode: gain,
-      osc: oscil
+      osc: oscil,
+      biquadFilter: biquadFilter,
+      convolver: convolver,
+      distortion: distortion
     };
   
     oscillator.osc.connect(oscillator.gainNode);
+    oscillator.gainNode.connect(oscillator.biquadFilter);
+    oscillator.gainNode.connect(oscillator.convolver);
+    oscillator.gainNode.connect(oscillator.distortion);
     oscillator.gainNode.connect(oscillator.audioCtx.destination);
     oscillator.osc.start();
     audCtx.suspend();
@@ -41,7 +53,16 @@ function App() {
         </div>
         <div className='instruments-container'>
           {oscList?.map((osc, index) => (
-            <div key={`osc_${index}`}><MusicThing audioCtx={osc.audioCtx} gainNode={osc.gainNode} oscOne={osc.osc}/></div>
+            <div key={`osc_${index}`}>
+              <MusicThing 
+                audioCtx={osc.audioCtx} 
+                gainNode={osc.gainNode} 
+                oscOne={osc.osc}
+                biquadFilterNode={osc.biquadFilter}
+                convolverNode={osc.convolver}
+                distortionNode={osc.distortion}
+                 />
+            </div>
           ))}
         </div>
       </div>
