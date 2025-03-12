@@ -3,7 +3,7 @@ import './MusicThing.css';
 
 
 
-export default function MusicThing({ audioCtx, gainNode, oscOne, biquadFilterNode, convolverNode, distortionNode }: { audioCtx: AudioContext, gainNode: GainNode, oscOne: OscillatorNode, biquadFilterNode: BiquadFilterNode, convolverNode: ConvolverNode, distortionNode: WaveShaperNode  }) {
+export default function MusicThing({ audioCtx, gainNode, oscOne }: { audioCtx: AudioContext, gainNode: GainNode, oscOne: OscillatorNode, biquadFilterNode: BiquadFilterNode, convolverNode: ConvolverNode, distortionNode: WaveShaperNode  }) {
     // const AudioContext = window.AudioContext;
     const [gain, setGain] = useState(0.5);
     const [soundWave, setSoundWave] = useState<OscillatorType>("sine");
@@ -12,8 +12,8 @@ export default function MusicThing({ audioCtx, gainNode, oscOne, biquadFilterNod
     const [startOscBtnValue, setStartOscBtnValue] = useState("Start");
     const [frequency, setFrequency] = useState(440.0);
     const [biquadFilter, setBiquadFilter] = useState();
-    const [convolver, setConvolver] = useState();
-    const [distortion, setDistortion] = useState();
+    // const [convolver, setConvolver] = useState();
+    // const [distortion, setDistortion] = useState();
 
     // let mute = false;
     function startStopOscillator() {
@@ -45,7 +45,7 @@ export default function MusicThing({ audioCtx, gainNode, oscOne, biquadFilterNod
         setFrequency(e.target.value);
     }
 
-    function muteOsc(e: any) {
+    function muteOsc() {
         setMute(!mute);
     }
 
