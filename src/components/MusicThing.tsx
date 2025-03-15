@@ -11,7 +11,7 @@ export default function MusicThing({ audioCtx, gainNode, oscOne }: { audioCtx: A
     const [mute, setMute] = useState(false);
     const [startOscBtnValue, setStartOscBtnValue] = useState("Start");
     const [frequency, setFrequency] = useState(440.0);
-    const [biquadFilter, setBiquadFilter] = useState();
+    // const [biquadFilter, setBiquadFilter] = useState();
     // const [convolver, setConvolver] = useState();
     // const [distortion, setDistortion] = useState();
 
@@ -49,9 +49,9 @@ export default function MusicThing({ audioCtx, gainNode, oscOne }: { audioCtx: A
         setMute(!mute);
     }
 
-    function handleBiquadFilterInput(e: any) {
-        setBiquadFilter(e.target.value);
-    }
+    // function handleBiquadFilterInput(e: any) {
+    //     setBiquadFilter(e.target.value);
+    // }
     useEffect(() => {
         if (mute) {
             gainNode.gain.setValueAtTime(0, audioCtx.currentTime);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import MusicThing from './components/MusicThing';
 
@@ -13,7 +13,7 @@ type Oscillator = {
 
 function App() {
   const [oscList, setOscList] = useState<Oscillator[]>([]);
-  const [mute, setMute] = useState(false);
+  // const [mute, setMute] = useState(false);
   
   function createOsc() {
   
