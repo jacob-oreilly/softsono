@@ -74,7 +74,7 @@ export default function MusicThing({ audioCtx, gainNode, oscOne }: { audioCtx: A
                 <div className="param">Gain: <input value={gain} onChange={handleGainInput} type="number" name="gain" id="gainInput" /></div>
                 <div className="param">frequency: <input value={frequency} onChange={handleFrequencyInput} type="range" min="0" max="7050" name="frequency" id="frequencyInput" /></div>
                 <div className="param">Detune: <input value={detune} onChange={handleDetuneInput} type="number" name="detune" id="detuneInput" /></div>
-                <div className="param">Biquad Filter: <input value={biquadFilter} onChange={handleBiquadFilterInput} type="range" min="0" max="7050" name="frequency" id="frequencyInput" /></div>
+                {/* <div className="param">Biquad Filter: <input value={biquadFilter} onChange={handleBiquadFilterInput} type="range" min="0" max="7050" name="frequency" id="frequencyInput" /></div> */}
                 <div className="param">
                     Sound Wave:
                     <select value={soundWave} onChange={handleWaveSelection}>
