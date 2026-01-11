@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import MusicThing from './components/MusicThing';
 
@@ -13,6 +13,8 @@ type Oscillator = {
 
 function App() {
   const [oscList, setOscList] = useState<Oscillator[]>([]);
+  const [startOscBtnValue, setStartOscBtnValue] = useState("Start");
+  // const [mute, setMute] = useState(false);
   
   function createOsc() {
   
@@ -44,12 +46,26 @@ function App() {
     ]);
   }
 
+  function startStopOscillator() {
+    oscList.forEach(oscillator => {
+      if (oscillator.audioCtx.state === "suspended") {
+        oscillator.audioCtx.resume();
+        setStartOscBtnValue("Stop");
+      }
+      else {
+        oscillator.audioCtx.suspend();
+        setStartOscBtnValue("Start");
+      }
+    });
+}
+
   return (
     <>
      <div className="container">
         <h1>Where music starts!!!</h1>
         <div>
           <button onClick={createOsc}>Add Osc</button>
+          <button className="start-all" id="startAll" onClick={startStopOscillator}>{startOscBtnValue}</button>
         </div>
         <div className='instruments-container'>
           {oscList?.map((osc, index) => (
