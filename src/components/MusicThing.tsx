@@ -1,9 +1,18 @@
 import { useEffect, useState } from "react";
 import './MusicThing.css';
 
+type MusicThingProps = {
+    audioCtx: AudioContext,
+    gainNode: GainNode,
+    osc: OscillatorNode,
+    biquadFilter: BiquadFilterNode,
+    convolver: ConvolverNode,
+    distortion: WaveShaperNode,
+    isMuted: boolean,
+    onClickGlobalMute: () => void
+}
 
-
-export default function MusicThing({ audioCtx, gainNode, oscOne }: { audioCtx: AudioContext, gainNode: GainNode, oscOne: OscillatorNode, biquadFilterNode: BiquadFilterNode, convolverNode: ConvolverNode, distortionNode: WaveShaperNode  }) {
+const MusicThing = (props: MusicThingProps) => {
     // const AudioContext = window.AudioContext;
     const [gain, setGain] = useState(0.5);
     const [soundWave, setSoundWave] = useState<OscillatorType>("sine");
@@ -17,12 +26,12 @@ export default function MusicThing({ audioCtx, gainNode, oscOne }: { audioCtx: A
 
     // let mute = false;
     function startStopOscillator() {
-        if (audioCtx.state === "suspended") {
-            audioCtx.resume();
+        if (props.audioCtx.state === "suspended") {
+            props.audioCtx.resume();
             setStartOscBtnValue("Stop");
         }
         else {
-            audioCtx.suspend();
+            props.audioCtx.suspend();
             setStartOscBtnValue("Start");
         }
     }
@@ -46,30 +55,37 @@ export default function MusicThing({ audioCtx, gainNode, oscOne }: { audioCtx: A
     }
 
     function muteOsc() {
-        setMute(!mute);
+        if (!props.isMuted) {
+            setMute(!mute);
+        }
     }
 
     // function handleBiquadFilterInput(e: any) {
     //     setBiquadFilter(e.target.value);
     // }
     useEffect(() => {
+        startStopOscillator()
         if (mute) {
-            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+            props.gainNode.gain.setValueAtTime(0, props.audioCtx.currentTime);
         }
         else {
-            gainNode.gain.setValueAtTime(gain, audioCtx.currentTime);
+            props.gainNode.gain.setValueAtTime(gain, props.audioCtx.currentTime);
         }
-        oscOne.type = soundWave;
-        oscOne.detune.setValueAtTime(detune, audioCtx.currentTime);
-        oscOne.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+        props.osc.type = soundWave;
+        props.osc.detune.setValueAtTime(detune, props.audioCtx.currentTime);
+        props.osc.frequency.setValueAtTime(frequency, props.audioCtx.currentTime);
     })
+
+    useEffect(() => {
+        setMute(props.isMuted)
+    }, [props.isMuted])
     return (
         <div className="instrument-container">
             <h3>Oscillator Node: </h3>
             <div className="osc-controlls">
                 <div className="param">
-                    <button className="start-osc" id="startOsc" onClick={startStopOscillator}>{startOscBtnValue}</button>
-                    <button className="mute" id="muteButton" onClick={muteOsc}>Mute</button>
+                    {/* <button className="start-osc" id="startOsc" onClick={startStopOscillator}>{startOscBtnValue}</button> */}
+                    <button className="mute" id="muteButton" onClick={muteOsc}>{mute ? `Unmute` : `Mute`}</button>
                 </div>
                 <div className="param">Gain: <input value={gain} onChange={handleGainInput} type="number" name="gain" id="gainInput" /></div>
                 <div className="param">frequency: <input value={frequency} onChange={handleFrequencyInput} type="number" min="0" max="7050" name="frequency" id="frequencyInput" /></div>
@@ -88,3 +104,5 @@ export default function MusicThing({ audioCtx, gainNode, oscOne }: { audioCtx: A
         </div>
     )
 }
+
+export default MusicThing

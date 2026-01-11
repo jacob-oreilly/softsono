@@ -15,6 +15,7 @@ function App() {
   const [oscList, setOscList] = useState<Oscillator[]>([]);
   const [startOscBtnValue, setStartOscBtnValue] = useState("Start");
   // const [mute, setMute] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   
   function createOsc() {
   
@@ -50,6 +51,7 @@ function App() {
     oscList.forEach(oscillator => {
       if (oscillator.audioCtx.state === "suspended") {
         oscillator.audioCtx.resume();
+        setIsMuted(true)
         setStartOscBtnValue("Stop");
       }
       else {
@@ -57,7 +59,12 @@ function App() {
         setStartOscBtnValue("Start");
       }
     });
-}
+  }
+  function onClickGlobalMute() {
+    setIsMuted(!isMuted)
+  }
+
+
 
   return (
     <>
@@ -65,7 +72,8 @@ function App() {
         <h1>Where music starts!!!</h1>
         <div>
           <button onClick={createOsc}>Add Osc</button>
-          <button className="start-all" id="startAll" onClick={startStopOscillator}>{startOscBtnValue}</button>
+          {/* <button className="start-all" id="startAll" onClick={startStopOscillator}>{startOscBtnValue}</button> */}
+          <button className='mute-all' id='muteAll' onClick={onClickGlobalMute}>{isMuted ? `Unmute` : `Mute`}</button>
         </div>
         <div className='instruments-container'>
           {oscList?.map((osc, index) => (
@@ -73,10 +81,12 @@ function App() {
               <MusicThing 
                 audioCtx={osc.audioCtx} 
                 gainNode={osc.gainNode} 
-                oscOne={osc.osc}
-                biquadFilterNode={osc.biquadFilter}
-                convolverNode={osc.convolver}
-                distortionNode={osc.distortion}
+                osc={osc.osc}
+                biquadFilter={osc.biquadFilter}
+                convolver={osc.convolver}
+                distortion={osc.distortion}
+                isMuted={isMuted}
+                onClickGlobalMute={onClickGlobalMute}
                  />
             </div>
           ))}
