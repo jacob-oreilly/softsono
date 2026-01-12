@@ -54,6 +54,10 @@ const MusicThing = (props: MusicThingProps) => {
         setFrequency(e.target.value);
     }
 
+    function setFrequencyViaMidi(note: number) {
+        setFrequency(note);
+    }
+
     function muteOsc() {
         if (!props.isMuted) {
             setMute(!mute);

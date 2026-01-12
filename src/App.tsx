@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './App.css';
 import MusicThing from './components/MusicThing';
+import MidiController from './components/MidiController';
 
 type Oscillator = {
   audioCtx: AudioContext,
@@ -8,7 +9,7 @@ type Oscillator = {
   osc: OscillatorNode,
   biquadFilter: BiquadFilterNode,
   convolver: ConvolverNode,
-  distortion: WaveShaperNode  
+  distortion: WaveShaperNode
 }
 
 function App() {
@@ -16,9 +17,9 @@ function App() {
   const [startOscBtnValue, setStartOscBtnValue] = useState("Start");
   // const [mute, setMute] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  
+
   function createOsc() {
-  
+
     const audCtx = new AudioContext();
     const gain = audCtx.createGain();
     const oscil = audCtx.createOscillator();
@@ -33,7 +34,7 @@ function App() {
       convolver: convolver,
       distortion: distortion
     };
-  
+
     oscillator.osc.connect(oscillator.gainNode);
     oscillator.gainNode.connect(oscillator.biquadFilter);
     oscillator.gainNode.connect(oscillator.convolver);
@@ -68,26 +69,27 @@ function App() {
 
   return (
     <>
-     <div className="container">
+      <div className="container">
         <h1>Where music starts!!!</h1>
         <div>
           <button onClick={createOsc}>Add Osc</button>
           {/* <button className="start-all" id="startAll" onClick={startStopOscillator}>{startOscBtnValue}</button> */}
           <button className='mute-all' id='muteAll' onClick={onClickGlobalMute}>{isMuted ? `Unmute` : `Mute`}</button>
+          <MidiController />
         </div>
         <div className='instruments-container'>
           {oscList?.map((osc, index) => (
             <div key={`osc_${index}`}>
-              <MusicThing 
-                audioCtx={osc.audioCtx} 
-                gainNode={osc.gainNode} 
+              <MusicThing
+                audioCtx={osc.audioCtx}
+                gainNode={osc.gainNode}
                 osc={osc.osc}
                 biquadFilter={osc.biquadFilter}
                 convolver={osc.convolver}
                 distortion={osc.distortion}
                 isMuted={isMuted}
                 onClickGlobalMute={onClickGlobalMute}
-                 />
+              />
             </div>
           ))}
         </div>
